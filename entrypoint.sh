@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 if [[ -z "${CI_RUN}" ]]; then
     cd /ansible

@@ -27,7 +27,7 @@ class Hello(BaseHTTPRequestHandler):
         </head>
         <body>
           <div id="main"> 
-            LINUXSERVER CI PAGE
+            IMAGEGENIUS CI PAGE
           </div>
         </body>
       </html>
