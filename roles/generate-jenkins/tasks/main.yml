@@ -19,12 +19,19 @@
 ######################################
 #   Grab the Variables from github   #
 ######################################
-- name: download variables
+- name: Clone git repository
+  git:
+    repo: "https://github.com/{{ github_user }}/docker-{{ container_name }}.git"
+    dest: "/tmp/docker-{{ container_name }}"
+    version: "{{ github_branch }}"
+
+- name: Move templated variables
   when: lookup('env', 'LOCAL') != "true"
-  get_url:
-    url: "https://raw.githubusercontent.com/{{ github_user }}/docker-{{ container_name }}/{{ github_branch }}/{{ item }}"
+  copy:
+    src: "/tmp/docker-{{ container_name }}/{{ item }}"
     dest: "/tmp/{{ item }}"
-  loop: "{{  templated_vars  }}"
+  loop: "{{ templated_vars }}"
+
 
 - name: include var files for this project
   include_vars:
@@ -74,22 +81,6 @@
   when: lookup('env', 'LOCAL') != "true"
   file:
     path: "jenkins/{{ project_repo_name }}/.github/workflows"
-    state: directory
-    owner: "abc"
-    group: "abc"
-
-- name: create destination dir for generated github ISSUE_TEMPLATE files
-  when: lookup('env', 'LOCAL') == "true"
-  file:
-    path: "/tmp/.github/ISSUE_TEMPLATE"
-    state: directory
-    owner: "abc"
-    group: "abc"
-
-- name: create destination dir for generated github ISSUE_TEMPLATE files
-  when: lookup('env', 'LOCAL') != "true"
-  file:
-    path: "jenkins/{{ project_repo_name }}/.github/ISSUE_TEMPLATE"
     state: directory
     owner: "abc"
     group: "abc"

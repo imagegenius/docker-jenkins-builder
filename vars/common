@@ -4,33 +4,20 @@
 ######
 
 # organization variables
-lsio_project_name: "linuxserver.io"
-lsio_project_name_short: "linuxserver"
-lsio_short_url: "{{ lsio_project_name }}"
-lsio_full_url: "https://{{ lsio_project_name }}"
-lsio_blog_url: "https://blog.{{ lsio_short_url }}"
-lsio_ci_url: "https://ci.{{ lsio_short_url }}"
-lsio_discord_url: "https://discord.gg/YWrKVTn"
-lsio_discourse_url: "https://discourse.{{ lsio_short_url }}"
-lsio_docker_hub_url: "https://hub.docker.com/r/{{ lsio_project_name_short }}"
-lsio_docs_url: "https://docs.{{ lsio_short_url }}"
-lsio_fleet_url: "https://fleet.{{ lsio_short_url }}"
-lsio_github_url: "https://github.com/{{ lsio_project_name_short }}"
-lsio_gitlab_url: "https://gitlab.com/{{ lsio_project_name }}"
-lsio_irc_url: "https://irc.{{ lsio_short_url }}"
-lsio_microbadger_url: "https://microbadger.com/images/{{ lsio_project_name_short }}"
-lsio_mods_url: "https://mods.{{ lsio_short_url }}/?mod={{ project_name }}"
-lsio_universal_mods_url: "https://mods.{{ lsio_short_url }}/?mod=universal"
-lsio_object_url: "https://ci-tests.{{ lsio_short_url }}"
-lsio_opencollective_url: "https://opencollective.com/{{ lsio_project_name_short }}"
-lsio_podcast_url: "https://anchor.fm/linuxserverio"
+ig_project_name: "imagegenius.io"
+ig_project_name_short: "imagegenius"
+ig_short_url: "{{ ig_project_name }}"
+ig_full_url: "https://{{ ig_project_name }}"
+ig_ci_url: "https://ci.{{ ig_short_url }}"
+ig_docker_hub_url: "https://hub.docker.com/r/{{ ig_project_name_short }}"
+ig_github_url: "https://github.com/{{ ig_project_name_short }}"
+ig_object_url: "https://ci-tests.{{ ig_short_url }}"
 
 # project defaults
 project_deprecation_status: false
-project_github_asset: "{{ project_github_repo_url }}/blob/{{ ls_branch }}"
-project_github_repo_url: "{{ lsio_github_url }}/{{ project_repo_name }}"
+project_github_asset: "{{ project_github_repo_url }}/blob/{{ ig_branch }}"
+project_github_repo_url: "{{ ig_github_url }}/{{ project_repo_name }}"
 project_repo_name: "docker-{{ project_name }}"
-project_scarfio_url: "https://scarf.sh/gateway/{{ lsio_project_name_short }}-ci/docker/{{ lsio_project_name_short }}%2F{{ project_name }}"
 
 # supported architectures
 arch_x86_64: "x86-64"
@@ -38,54 +25,22 @@ arch_arm64: "arm64"
 arch_armhf: "armhf"
 
 # descriptions
-lsio_blog_desc: "all the things you can do with our containers including How-To guides, opinions and much more!"
-lsio_discord_desc: "realtime support / chat with the community and the team."
-lsio_discourse_desc: "post on our community forum."
-lsio_fleet_desc: "an online web interface which displays all of our maintained images."
-lsio_github_desc: "view the source for all of our repositories."
-lsio_irc_desc: "on freenode at `#{{ lsio_project_name }}`. Our primary support channel is Discord."
-lsio_microbadger_desc: "Get your own version badge on microbadger.com"
-lsio_mods_desc: "view available mods for this container."
-lsio_universal_mods_desc: "view available universal mods."
-lsio_opencollective_desc: "please consider helping us by either donating or contributing to our budget"
-lsio_podcast_desc: "on hiatus. Coming back soon (late 2018)."
 
 # asset urls
-lsio_primary_logo_url: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver_medium.png
-lsio_favicon_logo_url: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver-ls-logo.png
 
 # badge parameters
-lsio_badge_color: "94398d"
-lsio_badge_label_color: "555555"
-lsio_badge_logo_color: "ffffff"
-lsio_badge_style: "for-the-badge"
-lsio_badge_url_parameters: "color={{ lsio_badge_color }}&labelColor={{ lsio_badge_label_color }}&logoColor={{ lsio_badge_logo_color }}&style={{ lsio_badge_style }}"
-lsio_badge_url_parameters_ci: "labelColor={{ lsio_badge_label_color }}&logoColor={{ lsio_badge_logo_color }}&style={{ lsio_badge_style }}"
-lsio_badge_url_parameters_scarfio: "color={{ lsio_badge_color }}&label-color={{ lsio_badge_label_color }}&logo-color={{ lsio_badge_logo_color }}&style={{ lsio_badge_style }}"
+ig_badge_color: "007EC6"
+ig_badge_label_color: "555555"
+ig_badge_logo_color: "ffffff"
+ig_badge_style: "for-the-badge"
+ig_badge_url_parameters: "color={{ ig_badge_color }}&labelColor={{ ig_badge_label_color }}&logoColor={{ ig_badge_logo_color }}&style={{ ig_badge_style }}"
+ig_badge_url_parameters_ci: "labelColor={{ ig_badge_label_color }}&logoColor={{ ig_badge_logo_color }}&style={{ ig_badge_style }}"
 
 # badges
-lsio_scarfio_pulls: "https://scarf.sh/installs-badge/{{ lsio_project_name_short }}-ci/{{ lsio_project_name_short }}%2F{{ project_name }}?{{ lsio_badge_url_parameters_scarfio }}&package-type=docker"
-lsio_shieldsio_discord: "https://img.shields.io/discord/354974912613449730.svg?{{ lsio_badge_url_parameters }}&label=Discord&logo=discord"
-lsio_shieldsio_discourse_topics: "https://img.shields.io/discourse/https/discourse.{{ lsio_short_url }}/topics.svg?{{ lsio_badge_url_parameters }}&logo=discourse"
-lsio_shieldsio_docker_pulls: "https://img.shields.io/docker/pulls/{{ lsio_project_name_short }}/{{ project_name }}.svg?{{ lsio_badge_url_parameters }}&label=pulls&logo=docker"
-lsio_shieldsio_docker_stars: "https://img.shields.io/docker/stars/{{ lsio_project_name_short }}/{{ project_name }}.svg?{{ lsio_badge_url_parameters }}&label=stars&logo=docker"
-lsio_shieldsio_dynamic_ci: "https://img.shields.io/badge/dynamic/yaml?{{ lsio_badge_url_parameters }}&label=CI&query=CI&url=https%3A%2F%2Fci-tests.linuxserver.io%2Flinuxserver%2F{{ project_name }}%2Flatest%2Fci-status.yml"
-lsio_shieldsio_dynamic_mods: "https://img.shields.io/badge/dynamic/yaml?{{ lsio_badge_url_parameters }}&label={{ project_name }}&query=%24.mods%5B%27{{ project_name }}%27%5D.mod_count&url=https%3A%2F%2Fraw.githubusercontent.com%2Flinuxserver%2Fdocker-mods%2Fmaster%2Fmod-list.yml"
-lsio_shieldsio_dynamic_universal_mods: "https://img.shields.io/badge/dynamic/yaml?{{ lsio_badge_url_parameters }}&label=universal&query=%24.mods%5B%27universal%27%5D.mod_count&url=https%3A%2F%2Fraw.githubusercontent.com%2Flinuxserver%2Fdocker-mods%2Fmaster%2Fmod-list.yml"
-lsio_shieldsio_github_release: "https://img.shields.io/github/release/{{ lsio_project_name_short }}/{{ project_repo_name }}.svg?{{ lsio_badge_url_parameters }}&logo=github"
-lsio_shieldsio_github_stars: "https://img.shields.io/github/stars/{{ lsio_project_name_short }}/{{ project_repo_name }}.svg?{{ lsio_badge_url_parameters }}&logo=github"
-lsio_shieldsio_jenkins_build: "https://img.shields.io/jenkins/build?{{ lsio_badge_url_parameters_ci }}&jobUrl=https%3A%2F%2Fci.{{ lsio_project_name }}%2Fjob%2FDocker-Pipeline-Builders%2Fjob%2F{{ project_repo_name }}%2Fjob%2F{{ ls_branch }}%2F&logo=jenkins"
-lsio_shieldsio_microbadger_layers: "https://img.shields.io/microbadger/layers/{{ lsio_project_name_short }}/{{ project_name }}.svg?{{ lsio_badge_url_parameters }}"
-lsio_shieldsio_opencollective_all: "https://img.shields.io/opencollective/all/{{ lsio_project_name_short }}.svg?{{ lsio_badge_url_parameters }}&label=Supporters&logo=open%20collective"
-lsio_shieldsio_static_blog: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=Blog"
-lsio_shieldsio_static_fleet: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=Fleet"
-lsio_shieldsio_static_github_package: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=GitHub%20Package&logo=github"
-lsio_shieldsio_static_github: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=GitHub&logo=github"
-lsio_shieldsio_static_gitlab_registry: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=GitLab%20Registry&logo=gitlab"
-lsio_shieldsio_static_gitlab: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=GitLab&logo=gitlab"
-lsio_shieldsio_static_irc: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=IRC"
-lsio_shieldsio_static_podcast: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=Podcast"
-lsio_shieldsio_static_quay: "https://img.shields.io/static/v1.svg?{{ lsio_badge_url_parameters }}&label={{ lsio_project_name }}&message=Quay.io"
+ig_shieldsio_github_release: "https://img.shields.io/github/release/{{ ig_project_name_short }}/{{ project_repo_name }}.svg?{{ ig_badge_url_parameters }}&logo=github"
+ig_shieldsio_badge_github_package: "https://shields.io/badge/GitHub%20Package-blue?logo=github&logoColor={{ ig_badge_logo_color }}&style={{ ig_badge_style }}"
+ig_shieldsio_jenkins_build: "https://img.shields.io/jenkins/build?{{ ig_badge_url_parameters_ci }}&jobUrl=https%3A%2F%2Fci.{{ ig_project_name }}%2Fjob%2FDocker-Pipeline-Builders%2Fjob%2F{{ project_repo_name }}%2Fjob%2F{{ ig_branch }}%2F&logo=jenkins"
+ig_shieldsio_dynamic_ci: "https://img.shields.io/badge/dynamic/yaml?{{ ig_badge_url_parameters }}&label=CI&query=CI&url=https%3A%2F%2Fci-tests.imagegenius.io%2F{{ project_name }}%2Flatest-{{ ig_branch }}%2Fci-status.yml"
 
 ######
 # Common Params

@@ -47,15 +47,17 @@
 <!-- GENERATED FROM {{ project_github_asset }}/readme-vars.yml -->
 <Container version="2">
     <Name>{{ param_container_name | lower }}</Name>
-    <Repository>lscr.io/{{ lsio_project_name_short }}/{{ project_name }}</Repository>
-    <Registry>https://github.com/orgs/{{ lsio_project_name_short }}/packages/container/package/{{ project_name }}</Registry>
-    <DonateText>Donations</DonateText>
-    <DonateLink>https://www.linuxserver.io/donate</DonateLink>
-    <DonateImg>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/donate.png</DonateImg>
+    <Repository>ghcr.io/{{ ig_project_name_short }}/{{ project_name }}</Repository>
+    <Registry>https://github.com/orgs/{{ ig_project_name_short }}/packages/container/package/{{ project_name }}</Registry>
     <Network>{{ param_net if param_usage_include_net is sameas true else 'bridge' }}</Network>
     <Privileged>{{ "true" if privileged is sameas true else "false" }}</Privileged>
     <Support>{{ project_github_repo_url }}/issues/new/choose</Support>
     <Shell>bash</Shell>
+{% if unraid_category is defined and unraid_category != "" %}
+    <Category>{{ unraid_category }}</Category>
+{% else %}
+    <Category>Other:</Category>
+{% endif %}
 {% if project_deprecation_status %}
     <Deprecated>true</Deprecated>
 {% endif %}
@@ -89,11 +91,13 @@
     <WebUI>{{ "https" if better_vars.get("CI_SSL") == "true" else "http" }}://[IP]:[PORT:{{ better_vars.get("CI_PORT") }}]{{ better_vars.get("CI_WEBPATH") }}</WebUI>
 {% endif %}
 {# Set the WebUI link based on the link the CI runs against #}
-    <TemplateURL>{{ "false" if unraid_template_sync is sameas false else "https://raw.githubusercontent.com/linuxserver/templates/main/unraid/" + project_name | lower + ".xml" }}</TemplateURL>
-    <Icon>https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/linuxserver-ls-logo.png</Icon>
+    <TemplateURL>{{ "false" if unraid_template_sync is sameas false else "https://raw.githubusercontent.com/imagegenius/templates/main/unraid/" + project_name | lower + ".xml" }}</TemplateURL>
+    <Icon>https://raw.githubusercontent.com/imagegenius/templates/main/unraid/img/default.png</Icon>
 {% if (unraid_requirement is defined and unraid_requirement != "") or (external_application_snippet_enabled) %}
     <Requires>
+        {% if unraid_requirement is defined and unraid_requirement != "" %}
         {{ unraid_requirement }}
+        {% endif %}
         {% if external_application_snippet_enabled %}
         This container requires an external application to be run separately.
         {{ external_application_unraid_block }}
@@ -158,9 +162,9 @@
 {% endfor %}
 {% endif %}
 {#- Set optional variables #}
-    <Config Name="PUID" Target="PUID" Default="99" Description="Container Variable: PUID" Type="Variable" Display="advanced" Required="true" Mask="false"/>
-    <Config Name="PGID" Target="PGID" Default="100" Description="Container Variable: PGID" Type="Variable" Display="advanced" Required="true" Mask="false"/>
-    <Config Name="UMASK" Target="UMASK" Default="022" Description="Container Variable: UMASK" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+    <Config Name="PUID" Target="PUID" Default="99" Description="UID for permissions. Do not change unless you know what you're doing." Type="Variable" Display="advanced-hide" Required="true" Mask="false"/>
+    <Config Name="PGID" Target="PGID" Default="100" Description="GID for permissions. Do not change unless you know what you're doing." Type="Variable" Display="advanced-hide" Required="true" Mask="false"/>
+    <Config Name="UMASK" Target="UMASK" Default="022" Description="UMASK for newly created files. Do not change unless you know what you're doing." Type="Variable" Display="advanced-hide" Required="false" Mask="false"/>
 {# Set required devices, gets the name from the name atribute #}
 {% if param_device_map | default(false) %}
 {% for item in param_devices %}
