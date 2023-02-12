@@ -95,13 +95,13 @@
     <Icon>https://raw.githubusercontent.com/imagegenius/templates/main/unraid/img/default.png</Icon>
 {% if (unraid_requirement is defined and unraid_requirement != "") or (external_application_snippet_enabled) %}
     <Requires>
-        {% if unraid_requirement is defined and unraid_requirement != "" %}
-        {{ unraid_requirement }}
-        {% endif %}
-        {% if external_application_snippet_enabled %}
-        This container requires an external application to be run separately.
-        {{ external_application_unraid_block }}
-        {% endif %}
+{% if unraid_requirement is defined and unraid_requirement != "" %}
+{{ unraid_requirement }}
+{% endif %}
+{% if external_application_snippet_enabled %}
+This container requires an external application to be run separately.
+{{ external_application_unraid_block | trim }}
+{% endif %}
     </Requires>
 {% endif %}
 {# Create changelog #}
