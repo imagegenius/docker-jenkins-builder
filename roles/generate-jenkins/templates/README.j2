@@ -20,7 +20,7 @@ This image is deprecated. We will not offer support for this image and it will n
 {% endif %}
 {% endfor %}
 
-{{ project_blurb | trim }}
+[{{ project_name|capitalize }}]({{ project_url }}) - {{ project_blurb | trim }}
 {% if project_blurb_optional_extras_enabled %}
 {% for item in project_blurb_optional_extras %}
 * {{ item }}
