@@ -6,7 +6,7 @@ PyYAML                  6.0                    python
 alpine-baselayout       3.4.0-r0               apk     
 alpine-baselayout-data  3.4.0-r0               apk     
 alpine-keys             2.4-r1                 apk     
-alpine-release          3.17.2-r0              apk     
+alpine-release          3.17.3-r0              apk     
 ansible                 6.6.0                  python  
 ansible                 6.6.0-r0               apk     
 ansible-core            2.13.6                 python  
@@ -82,7 +82,7 @@ six                     1.16.0                 python
 skalibs                 2.12.0.1-r0            apk     
 sqlite-libs             3.40.1-r0              apk     
 ssl_client              1.35.0-r29             apk     
-tzdata                  2023b-r1               apk     
+tzdata                  2023c-r0               apk     
 utmps-libs              0.1.2.0-r1             apk     
 xz                      5.2.9-r0               apk     
 xz-libs                 5.2.9-r0               apk     
