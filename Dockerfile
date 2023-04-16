@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM ghcr.io/imagegenius/baseimage-alpine:3.17
 
 # set version label
@@ -10,7 +12,6 @@ RUN \
   echo "**** install build packages ****" && \
   apk add --no-cache --upgrade \
     ansible \
-    bash \
     git
 
 COPY . /ansible
