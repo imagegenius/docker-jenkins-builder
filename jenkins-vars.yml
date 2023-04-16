@@ -17,7 +17,6 @@ repo_vars:
   - CI_WEB = 'true'
   - CI_PORT = '8000'
   - CI_SSL = 'false'
-  - CI_DELAY = '30'
   - CI_DOCKERENV = 'CI_RUN=True'
   - CI_AUTH = ''
   - CI_WEBPATH = ''
