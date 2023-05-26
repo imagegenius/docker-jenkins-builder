@@ -360,19 +360,25 @@ pipeline {
     // Build Docker container local templating CI runs
     stage('Build-Jenkins-Builder') {
       steps {
-        sh "docker buildx build \
-          --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
-          --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
-          --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
-          --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
-          --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-          --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
-          --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
-          --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-          --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-          --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
-          --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
-          --no-cache --pull -t jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} --platform=linux/amd64 ."
+        sh '''#!/bin/bash
+              BUILDX_CONTAINER=$(head /dev/urandom | tr -dc 'a-z' | head -c12)
+              docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
+              docker buildx build \
+                --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
+                --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
+                --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
+                --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
+                --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
+                --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
+                --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
+                --no-cache --pull -t jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} --platform=linux/amd64 \
+                --builder=${BUILDX_CONTAINER} --load .
+              docker buildx rm ${BUILDX_CONTAINER}
+           '''
       }
     }
 {% endif %}
@@ -530,20 +536,26 @@ pipeline {
       }
       steps {
         echo "Running on node: ${NODE_NAME}"
-        sh "docker buildx build \
-          --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
-          --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
-          --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
-          --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
-          --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-          --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
-          --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
-          --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-          --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-          --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
-          --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
-          --no-cache --pull -t ${GITHUBIMAGE}:${META_TAG} --platform=linux/amd64 \
-          --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} ."
+        sh '''#! /bin/bash
+              BUILDX_CONTAINER=$(head /dev/urandom | tr -dc 'a-z' | head -c12)
+              docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
+              docker buildx build \
+                --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
+                --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
+                --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
+                --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
+                --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
+                --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
+                --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
+                --no-cache --pull -t ${GITHUBIMAGE}:${META_TAG} --platform=linux/amd64 \
+                --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} . \
+                --builder=${BUILDX_CONTAINER} --load
+              docker buildx rm ${BUILDX_CONTAINER}
+           '''
       }
     }
     // Build MultiArch Docker containers for push to IG Repo
@@ -559,20 +571,26 @@ pipeline {
         stage('Build X86') {
           steps {
             echo "Running on node: ${NODE_NAME}"
-            sh "docker buildx build \
-              --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
-              --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
-              --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
-              --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-              --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-              --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
-              --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
-              --no-cache --pull -t ${GITHUBIMAGE}:amd64-${META_TAG} --platform=linux/amd64 \
-              --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} ."
+            sh '''#!/bin/bash
+                  BUILDX_CONTAINER=$(head /dev/urandom | tr -dc 'a-z' | head -c12)
+                  docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
+                  docker buildx build \
+                    --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                    --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
+                    --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
+                    --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
+                    --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                    --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
+                    --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
+                    --no-cache --pull -t ${GITHUBIMAGE}:amd64-${META_TAG} --platform=linux/amd64 \
+                    --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} . \
+                    --builder=${BUILDX_CONTAINER} --load
+                  docker buildx rm ${BUILDX_CONTAINER}
+               '''
           }
         }
 {% if build_armhf %}
@@ -592,20 +610,26 @@ pipeline {
             sh '''#! /bin/bash
                   echo $GITHUB_TOKEN | docker login ghcr.io -u ImageGeniusCI --password-stdin
                '''
-            sh "docker buildx build \
-              --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
-              --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
-              --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
-              --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-              --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-              --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
-              --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
-              --no-cache --pull -f Dockerfile.armhf -t ${GITHUBIMAGE}:arm32v7-${META_TAG} --platform=linux/arm/v7 \
-              --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} ."
+            sh '''#! /bin/bash
+                  BUILDX_CONTAINER=$(head /dev/urandom | tr -dc 'a-z' | head -c12)
+                  docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
+                  docker buildx build \
+                    --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                    --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
+                    --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
+                    --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
+                    --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                    --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
+                    --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
+                    --no-cache --pull -f Dockerfile.armhf -t ${GITHUBIMAGE}:arm32v7-${META_TAG} --platform=linux/arm/v7 \
+                    --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} . \
+                    --builder=${BUILDX_CONTAINER} --load
+                  docker buildx rm ${BUILDX_CONTAINER}
+               '''
             sh "docker tag ${GITHUBIMAGE}:arm32v7-${META_TAG} ghcr.io/imagegenius/igdev-buildcache:arm32v7-${COMMIT_SHA}-${BUILD_NUMBER}"
             retry(5) {
               sh "docker push ghcr.io/imagegenius/igdev-buildcache:arm32v7-${COMMIT_SHA}-${BUILD_NUMBER}"
@@ -631,20 +655,26 @@ pipeline {
             sh '''#!/bin/bash
                   echo $GITHUB_TOKEN | docker login ghcr.io -u ImageGeniusCI --password-stdin
                '''
-            sh "docker buildx build \
-              --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
-              --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
-              --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
-              --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-              --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
-              --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-              --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-              --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
-              --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
-              --no-cache --pull -f Dockerfile.aarch64 -t ${GITHUBIMAGE}:arm64v8-${META_TAG} --platform=linux/arm64 \
-              --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} ."
+            sh '''#! /bin/bash
+                  BUILDX_CONTAINER=$(head /dev/urandom | tr -dc 'a-z' | head -c12)
+                  docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
+                  docker buildx build \
+                    --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                    --label \"org.opencontainers.image.authors={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.url={{ project_github_repo_url }}/packages\" \
+                    --label \"org.opencontainers.image.source={{ project_github_repo_url }}\" \
+                    --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
+                    --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.vendor={{ ig_project_name }}\" \
+                    --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                    --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                    --label \"org.opencontainers.image.title={{ project_name|capitalize }}\" \
+                    --label \"org.opencontainers.image.description={% if project_blurb is defined %}{{ project_blurb | replace('"', '') | replace('\n', '  ') }}{% else %}{{ project_name }} image by {{ ig_project_name }}{% endif %}\" \
+                    --no-cache --pull -f Dockerfile.aarch64 -t ${GITHUBIMAGE}:arm64v8-${META_TAG} --platform=linux/arm64 \
+                    --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} . \
+                    --builder=${BUILDX_CONTAINER} --load
+                  docker buildx rm ${BUILDX_CONTAINER}
+               '''
             sh "docker tag ${GITHUBIMAGE}:arm64v8-${META_TAG} ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER}"
             retry(5) {
               sh "docker push ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER}"
@@ -715,6 +745,13 @@ pipeline {
         environment name: 'EXIT_STATUS', value: ''
       }
       steps {
+        sh '''#! /bin/bash
+              echo "Packages were updated. Cleaning up the image and exiting."
+              if [ "${MULTIARCH}" == "true" ] && [ "${PACKAGE_CHECK}" == "false" ]; then
+                docker rmi ${GITHUBIMAGE}:amd64-${META_TAG} || :
+              else
+                docker rmi ${GITHUBIMAGE}:${META_TAG} || :
+              fi'''
         script{
           env.EXIT_STATUS = 'ABORTED'
         }
@@ -732,6 +769,13 @@ pipeline {
         }
       }
       steps {
+        sh '''#! /bin/bash
+              echo "There are no package updates. Cleaning up the image and exiting."
+              if [ "${MULTIARCH}" == "true" ] && [ "${PACKAGE_CHECK}" == "false" ]; then
+                docker rmi ${GITHUBIMAGE}:amd64-${META_TAG} || :
+              else
+                docker rmi ${GITHUBIMAGE}:${META_TAG} || :
+              fi'''
         script{
           env.EXIT_STATUS = 'ABORTED'
         }
@@ -911,6 +955,11 @@ pipeline {
 {% endif %}
                   docker manifest annotate ${GITHUBIMAGE}:${SEMVER} ${GITHUBIMAGE}:arm64v8-${SEMVER} --os linux --arch arm64 --variant v8
                 fi
+{% if not build_armhf %}
+                docker manifest push --purge ${GITHUBIMAGE}:arm32v7-{{ release_tag }} || :
+                docker manifest create ${GITHUBIMAGE}:arm32v7-{{ release_tag }} ${GITHUBIMAGE}:amd64-{{ release_tag }}
+                docker manifest push --purge ${GITHUBIMAGE}:arm32v7-{{ release_tag }}
+{% endif %}
                 docker manifest push --purge ${GITHUBIMAGE}:{{ release_tag }}
                 docker manifest push --purge ${GITHUBIMAGE}:${META_TAG}{{ ' ' }}
                 docker manifest push --purge ${GITHUBIMAGE}:${EXT_RELEASE_TAG}{{ ' ' }}
@@ -919,7 +968,6 @@ pipeline {
                 fi
              '''
           }
-{% if not project_repo_name == "docker-jenkins-builder" and "docker-baseimage" not in project_repo_name %}
           sh '''#!/bin/bash
                 docker rmi \
                   ${GITHUBIMAGE}:amd64-${META_TAG} \
@@ -947,32 +995,6 @@ pipeline {
 {% endif %}
                   ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER} || :
              '''
-{% endif %}
-{% if "docker-baseimage" in project_repo_name %}
-          sh '''#!/bin/bash
-                docker rmi \
-{% if build_armhf %}
-                  ${GITHUBIMAGE}:arm32v7-${META_TAG} \
-                  ${GITHUBIMAGE}:arm32v7-{{ release_tag }} \
-                  ${GITHUBIMAGE}:arm32v7-${EXT_RELEASE_TAG} \
-{% endif %}
-                  ${GITHUBIMAGE}:arm64v8-${META_TAG} \
-                  ${GITHUBIMAGE}:arm64v8-{{ release_tag }} \
-                  ${GITHUBIMAGE}:arm64v8-${EXT_RELEASE_TAG} || :
-                if [ -n "${SEMVER}" ]; then
-                  docker rmi \
-{% if build_armhf %}
-                    ${GITHUBIMAGE}:arm32v7-${SEMVER} \
-{% endif %}
-                    ${GITHUBIMAGE}:arm64v8-${SEMVER} || :
-                fi
-                docker rmi \
-{% if build_armhf %}
-                  ghcr.io/imagegenius/igdev-buildcache:arm32v7-${COMMIT_SHA}-${BUILD_NUMBER} \
-{% endif %}
-                  ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER} || :
-             '''
-{% endif %}
       }
     }
     // If this is a public release tag it in the IG Github
@@ -1174,6 +1196,18 @@ pipeline {
           sh ''' curl -X POST -H "Content-Type: application/json" --data '{"avatar_url": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jenkins-avatar.png","embeds": [{"color": 16711680,\
                  "description": "**'${IG_REPO}' Build '${BUILD_NUMBER}' Failed! ({{ ig_branch }})**\\n**CI Results:**  '${CI_URL}'\\n**Job:** '${RUN_DISPLAY_URL}'\\n**Change:** '${CODE_URL}'\\n**External Release:** '${RELEASE_LINK}'\\n"}],\
                  "username": "Jenkins"}' ${BUILDS_DISCORD} '''
+          // Clean up images if CI tests fail
+          sh ''' if [ "${MULTIARCH}" == "true" ] && [ "${PACKAGE_CHECK}" == "false" ]; then
+                   docker rmi ${GITHUBIMAGE}:amd64-${META_TAG} || :
+{% if build_armhf %}
+                   docker rmi ghcr.io/imagegenius/igdev-buildcache:arm32v7-${COMMIT_SHA}-${BUILD_NUMBER} || :
+                   docker rmi  ${GITHUBIMAGE}:arm32v7-${META_TAG} || :
+{% endif %}
+                   docker rmi ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER} || :
+                   docker rmi ${GITHUBIMAGE}:arm64v8-${META_TAG} || :
+                 else
+                   docker rmi ${GITHUBIMAGE}:${META_TAG} || :
+                 fi'''
         }
       }
     }
