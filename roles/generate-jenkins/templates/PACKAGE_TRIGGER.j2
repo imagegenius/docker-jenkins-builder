@@ -14,12 +14,12 @@ jobs:
         run: |
           if [ -n "${{ '{{' }} secrets.PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }} {{ '}}' }}" ]; then
             echo "**** Github secret PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }} is set; skipping trigger. ****"
-			echo "Github secret \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\` is set; skipping trigger." >> $GITHUB_STEP_SUMMARY
+            echo "Github secret \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\` is set; skipping trigger." >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
           if [ $(curl -s {{ ig_ci_url }}/job/Docker-Pipeline-Builders/job/{{ project_repo_name }}/job/{{ ig_branch }}/lastBuild/api/json | jq -r '.building') == "true" ]; then
             echo "**** There already seems to be an active build on Jenkins; skipping package trigger ****"
-			echo "There already seems to be an active build on Jenkins; skipping package trigger" >> $GITHUB_STEP_SUMMARY
+            echo "There already seems to be an active build on Jenkins; skipping package trigger" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
           echo "**** Package trigger running off of {{ ig_branch }} branch. To disable, set a Github secret named \"PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\". ****"
