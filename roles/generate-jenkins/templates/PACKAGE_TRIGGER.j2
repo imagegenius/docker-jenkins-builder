@@ -4,28 +4,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  package-trigger-{{ ls_branch|regex_replace('[^a-zA-Z0-9-]','-') }}:
+  package-trigger-{{ ig_branch|regex_replace('[^a-zA-Z0-9-]','-') }}:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.1.0
 
       - name: Package Trigger
-        if: github.ref == 'refs/heads/{{ ls_branch }}'
+        if: github.ref == 'refs/heads/{{ ig_branch }}'
         run: |
-          if [ -n "${{ '{{' }} secrets.PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ls_branch|upper|regex_replace('[^A-Z0-9_]','_') }} {{ '}}' }}" ]; then
-            echo "**** Github secret PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ls_branch|upper|regex_replace('[^A-Z0-9_]','_') }} is set; skipping trigger. ****"
-            echo "Github secret \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ls_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\` is set; skipping trigger." >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ '{{' }} secrets.PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }} {{ '}}' }}" ]; then
+            echo "**** Github secret PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }} is set; skipping trigger. ****"
+            echo "Github secret \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\` is set; skipping trigger." >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
-          if [ $(curl -s {{ lsio_ci_url }}/job/Docker-Pipeline-Builders/job/{{ project_repo_name }}/job/{{ ls_branch }}/lastBuild/api/json | jq -r '.building') == "true" ]; then
+          if [ $(curl -s {{ ig_ci_url }}/job/Docker-Pipeline-Builders/job/{{ project_repo_name }}/job/{{ ig_branch }}/lastBuild/api/json | jq -r '.building') == "true" ]; then
             echo "**** There already seems to be an active build on Jenkins; skipping package trigger ****"
             echo "There already seems to be an active build on Jenkins; skipping package trigger" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
-          echo "**** Package trigger running off of {{ ls_branch }} branch. To disable, set a Github secret named \"PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ls_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\". ****"
-          echo "Package trigger running off of {{ ls_branch }} branch. To disable, set a Github secret named \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ls_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**** Package trigger running off of {{ ig_branch }} branch. To disable, set a Github secret named \"PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\". ****"
+          echo "Package trigger running off of {{ ig_branch }} branch. To disable, set a Github secret named \`PAUSE_PACKAGE_TRIGGER_{{ project_name|upper|regex_replace('[^A-Z0-9_]','_') }}_{{ ig_branch|upper|regex_replace('[^A-Z0-9_]','_') }}\`" >> $GITHUB_STEP_SUMMARY
           response=$(curl -iX POST \
-            {{ lsio_ci_url }}/job/Docker-Pipeline-Builders/job/{{ project_repo_name }}/job/{{ ls_branch }}/buildWithParameters?PACKAGE_CHECK=true \
+            {{ ig_ci_url }}/job/Docker-Pipeline-Builders/job/{{ project_repo_name }}/job/{{ ig_branch }}/buildWithParameters?PACKAGE_CHECK=true \
             --user ${{ '{{' }} secrets.JENKINS_USER {{ '}}' }}:${{ '{{' }} secrets.JENKINS_TOKEN {{ '}}' }} | grep -i location | sed "s|^[L|l]ocation: \(.*\)|\1|")
           echo "**** Jenkins job queue url: ${response%$'\r'} ****"
           echo "**** Sleeping 10 seconds until job starts ****"
