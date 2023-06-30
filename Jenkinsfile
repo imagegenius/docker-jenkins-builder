@@ -230,13 +230,14 @@ pipeline {
       }
       steps {
         sh '''#!/bin/bash
-              set -e
+              set -xe
               TEMPDIR=$(mktemp -d)
               # Stage 1 - Jenkinsfile update
               mkdir -p ${TEMPDIR}/repo
               git clone https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/repo/${IG_REPO}
+			  cd ${TEMPDIR}/repo/${IG_REPO}
               git checkout -f master
-              docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=master -v ${TEMPDIR}/repo/${IG_REPO}:/tmp/docker-${CONTAINER_NAME} -v ${TEMPDIR}:/ansible/jenkins jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
+              docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=master -v ${TEMPDIR}/repo/${IG_REPO}:/tmp/docker-${CONTAINER_NAME}:ro -v ${TEMPDIR}:/ansible/jenkins jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
               if [[ "$(md5sum Jenkinsfile | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile | awk '{ print $1 }')" ]]; then
                 cp ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile ${TEMPDIR}/repo/${IG_REPO}/
                 git add Jenkinsfile
