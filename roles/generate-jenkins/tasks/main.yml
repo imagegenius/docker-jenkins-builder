@@ -19,12 +19,12 @@
 ######################################
 #   Grab the Variables from github   #
 ######################################
-- name: download variables
+- name: Move templated variables
   when: lookup('env', 'LOCAL') != "true"
-  get_url:
-    url: "https://raw.githubusercontent.com/{{ github_user }}/docker-{{ container_name }}/{{ github_branch }}/{{ item }}"
+  copy:
+    src: "/tmp/docker-{{ container_name }}/{{ item }}"
     dest: "/tmp/{{ item }}"
-  loop: "{{  templated_vars  }}"
+  loop: "{{ templated_vars }}"
 
 - name: include var files for this project
   include_vars:
