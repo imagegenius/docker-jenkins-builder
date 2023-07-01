@@ -230,6 +230,7 @@ pipeline {
       }
       steps {
         sh '''#!/bin/bash
+              set -e
               TEMPDIR=$(mktemp -d)
               # Stage 1 - Jenkinsfile update
               mkdir -p ${TEMPDIR}/repo
