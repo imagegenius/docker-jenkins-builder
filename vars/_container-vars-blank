@@ -4,7 +4,7 @@
 project_name: name
 project_url: "https://url.com/"
 project_logo: "http://www.logo.com/logo.png"
-project_blurb: "[{{ project_name_short|capitalize }}]({{ project_url }}) short description goes here."
+project_blurb: "short description goes here."
 project_repo_name: "docker-{{ project_name }}"
 
 # deprecation information
@@ -49,8 +49,8 @@ param_net: "host"
 param_net_desc: "Shares host networking with container."
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London.", name: "Timezone" }
-# - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London.", name: "Timezone", env_options: ["Europe/Stockholm", "Europe/Brussels"] } # env_options is a optional parameter used to server options in a dropdown in unraid templating
+  - { env_var: "TZ", env_value: "Australia/Melbourne", desc: "Specify a timezone to use, eg. Australia/Melbourne.", name: "Timezone" }
+# - { env_var: "TZ", env_value: "Australia/Melbourne", desc: "Specify a timezone to use, eg. Australia/Melbourne.", name: "Timezone", env_options: ["Europe/Stockholm", "Europe/Brussels"] } # env_options is a optional parameter used to server options in a dropdown in unraid templating
 param_usage_include_vols: true
 param_volumes:
   - { vol_path: "/config", vol_host_path: "/path/to/appdata/config", desc: "Configuration files.", name: "Appdata" }
@@ -93,6 +93,7 @@ opt_security_opt_param_vars:
 unraid_template_sync: true
 unraid_template: true
 unraid_requirement: false # If not false, value is read as a string
+unraid_category: ""
 
 optional_block_1: false
 optional_block_1_items:

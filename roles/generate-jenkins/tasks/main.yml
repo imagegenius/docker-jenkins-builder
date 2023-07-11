@@ -17,15 +17,8 @@
     gid: "{{ lookup('env', 'PGID') | int }}"
 
 ######################################
-#   Grab the Variables from github   #
+#         Grab the Variables         #
 ######################################
-- name: download variables
-  when: lookup('env', 'LOCAL') != "true"
-  get_url:
-    url: "https://raw.githubusercontent.com/{{ github_user }}/docker-{{ container_name }}/{{ github_branch }}/{{ item }}"
-    dest: "/tmp/{{ item }}"
-  loop: "{{  templated_vars  }}"
-
 - name: include var files for this project
   include_vars:
     file: "/tmp/{{ item }}"
