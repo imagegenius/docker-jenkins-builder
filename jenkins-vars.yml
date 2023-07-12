@@ -1,26 +1,21 @@
 ---
-
 # jenkins variables
 project_name: docker-jenkins-builder
 external_type: os
 release_type: stable
 release_tag: latest
-ls_branch: master
+ig_branch: master
 repo_vars:
-  - BUILD_VERSION_ARG='BUILDER_VERSION'
-  - LS_USER='linuxserver'
-  - LS_REPO='docker-jenkins-builder'
-  - CONTAINER_NAME='jenkins-builder'
-  - DOCKERHUB_IMAGE='linuxserver/jenkins-builder'
-  - DEV_DOCKERHUB_IMAGE='lsiodev/jenkins-builder'
-  - PR_DOCKERHUB_IMAGE='lspipepr/jenkins-builder'
-  - DIST_IMAGE='alpine'
-  - MULTIARCH='true'
-  - CI='true'
-  - CI_WEB='true'
-  - CI_PORT='8000'
-  - CI_SSL='false'
-  - CI_DELAY='60'
-  - CI_DOCKERENV='CI_RUN=True'
-  - CI_AUTH='user:password'
-  - CI_WEBPATH=''
+  - BUILD_VERSION_ARG = 'BUILDER_VERSION'
+  - IG_USER = 'imagegenius'
+  - IG_REPO = 'docker-jenkins-builder'
+  - CONTAINER_NAME = 'jenkins-builder'
+  - DIST_IMAGE = 'alpine'
+  - MULTIARCH = 'true'
+  - CI = 'true'
+  - CI_WEB = 'true'
+  - CI_PORT = '8000'
+  - CI_SSL = 'false'
+  - CI_DOCKERENV = 'CI_RUN=True'
+  - CI_AUTH = ''
+  - CI_WEBPATH = ''
