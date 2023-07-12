@@ -203,16 +203,16 @@ pipeline {
               trap 'docker buildx rm ${BUILDX_CONTAINER}' EXIT
               docker buildx create --driver=docker-container --name=${BUILDX_CONTAINER}
               docker buildx build \
-          --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
+                --label \"org.opencontainers.image.created=${GITHUB_DATE}\" \
                 --label \"org.opencontainers.image.authors=imagegenius.io\" \
-          --label \"org.opencontainers.image.url=https://github.com/imagegenius/docker-jenkins-builder/packages\" \
-          --label \"org.opencontainers.image.source=https://github.com/imagegenius/docker-jenkins-builder\" \
+                --label \"org.opencontainers.image.url=https://github.com/imagegenius/docker-jenkins-builder/packages\" \
+                --label \"org.opencontainers.image.source=https://github.com/imagegenius/docker-jenkins-builder\" \
                 --label \"org.opencontainers.image.version=${EXT_RELEASE_CLEAN}-ig${IG_TAG_NUMBER}\" \
-          --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.revision=${COMMIT_SHA}\" \
                 --label \"org.opencontainers.image.vendor=imagegenius.io\" \
-          --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
-          --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
-          --label \"org.opencontainers.image.title=Jenkins-builder\" \
+                --label \"org.opencontainers.image.licenses=GPL-3.0-only\" \
+                --label \"org.opencontainers.image.ref.name=${COMMIT_SHA}\" \
+                --label \"org.opencontainers.image.title=Jenkins-builder\" \
                 --label \"org.opencontainers.image.description=jenkins-builder image by imagegenius.io\" \
                 --no-cache --pull -t jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} --platform=linux/amd64 \
                 --builder=${BUILDX_CONTAINER} --load .
@@ -232,13 +232,17 @@ pipeline {
         sh '''#! /bin/bash
               set -e
               TEMPDIR=$(mktemp -d)
-              # Stage 1 - Jenkinsfile update
-              mkdir -p ${TEMPDIR}/repo
-              git clone https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/repo/${IG_REPO}
-              cd ${TEMPDIR}/repo/${IG_REPO}
+              mkdir -p ${TEMPDIR}/source
+              git clone https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/source
+              cd ${TEMPDIR}/source
               git checkout -f master
-              docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=master -v ${TEMPDIR}/repo/${IG_REPO}:/tmp -v ${TEMPDIR}:/ansible/jenkins jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
+              docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=master -v ${TEMPDIR}/source:/tmp -v ${TEMPDIR}:/ansible/jenkins jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
+              # Stage 1 - Jenkinsfile update
               if [[ "$(md5sum Jenkinsfile | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile | awk '{ print $1 }')" ]]; then
+                mkdir -p ${TEMPDIR}/repo
+                git clone https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/repo/${IG_REPO}
+                cd ${TEMPDIR}/repo/${IG_REPO}
+                git checkout -f master
                 cp ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile ${TEMPDIR}/repo/${IG_REPO}/
                 git add Jenkinsfile
                 git commit -m 'Bot Updating Templated Files'
@@ -695,7 +699,7 @@ pipeline {
                   docker manifest push --purge ${GITHUBIMAGE}:arm32v7-latest || :
                   docker manifest create ${GITHUBIMAGE}:arm32v7-latest ${GITHUBIMAGE}:amd64-latest
                   docker manifest push --purge ${GITHUBIMAGE}:arm32v7-latest
-				fi
+                fi
                 docker manifest push --purge ${GITHUBIMAGE}:latest
                 docker manifest push --purge ${GITHUBIMAGE}:${META_TAG} 
                 docker manifest push --purge ${GITHUBIMAGE}:${EXT_RELEASE_TAG} 
@@ -855,7 +859,7 @@ pipeline {
     cleanup {
           // Clean up images if CI tests fail
           sh '''#! /bin/bash
-		        if [ "${MULTIARCH}" == "true" ] && [ "${PACKAGE_CHECK}" == "false" ]; then
+                if [ "${MULTIARCH}" == "true" ] && [ "${PACKAGE_CHECK}" == "false" ]; then
                   docker rmi ${GITHUBIMAGE}:amd64-${META_TAG} || :
                   docker rmi ghcr.io/imagegenius/igdev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER} || :
                   docker rmi ${GITHUBIMAGE}:arm64v8-${META_TAG} || :
