@@ -15,7 +15,9 @@ RUN \
   chmod +x /usr/bin/yq && \
   apk add --no-cache --upgrade \
     ansible \
-    git
+    git && \
+  apk del \
+    alpine-release
 
 COPY . /ansible
 

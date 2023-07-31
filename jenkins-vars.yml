@@ -5,6 +5,7 @@ external_type: os
 release_type: stable
 release_tag: latest
 ig_branch: master
+build_armhf: false
 repo_vars:
   - BUILD_VERSION_ARG = 'BUILDER_VERSION'
   - IG_USER = 'imagegenius'
