@@ -1,7 +1,7 @@
 ---
 
 github_branch: master
-github_user: linuxserver
+github_user: imagegenius
 templated_vars:
  - 'jenkins-vars.yml'
  - 'readme-vars.yml'
