@@ -1,3 +1,0 @@
-{% macro noter(text) -%}
-{{ text | regex_replace('\?\+(?P<level>\w+)(?>\[(?P<title>[ \w]+)\])?\(\|(?P<message>.*)\|\)', output_format ) }}
-{%- endmacro %}
