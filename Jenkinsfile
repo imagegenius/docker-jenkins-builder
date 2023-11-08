@@ -565,7 +565,7 @@ pipeline {
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -e IMAGE=\"${GITHUBIMAGE}\" \
                 -e CONTAINER=\"${CONTAINER_NAME}\" \
-                -e DELAY_START=\"${CI_DELAY}\" \
+                -e DELAY_START=\"${CI_DELAY:-30}\" \
                 -e TAGS=\"${CI_TAGS}\" \
                 -e META_TAG=\"${META_TAG}\" \
                 -e PORT=\"${CI_PORT}\" \
