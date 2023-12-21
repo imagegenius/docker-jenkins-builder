@@ -47,7 +47,7 @@ golang.org/x/text                    v0.9.0                              go-modu
 golang.org/x/xerrors                 v0.0.0-20220609144429-65e65417b02f  go-module  
 gopkg.in/op/go-logging.v1            v1.0.0-20160211212156-b2cb9fa56473  go-module  
 gopkg.in/yaml.v3                     v3.0.1                              go-module  
-jq                                   1.6-r3                              apk        
+jq                                   1.6-r4                              apk        
 libacl                               2.3.1-r3                            apk        
 libattr                              2.5.1-r4                            apk        
 libbsd                               0.11.7-r1                           apk        
