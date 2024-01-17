@@ -402,7 +402,7 @@ pipeline {
           script{
             env.SHELLCHECK_URL = 'https://ci-tests.imagegenius.io/' + env.CONTAINER_NAME + '/' + env.META_TAG + '/shellcheck-result.xml'
           }
-          sh '''curl -sL https://raw.githubusercontent.com/linuxserver/docker-jenkins-builder/master/checkrun.sh | /bin/bash'''
+          sh '''curl -sL https://raw.githubusercontent.com/imagegenius/docker-jenkins-builder/master/checkrun.sh | /bin/bash'''
           sh '''#! /bin/bash
                 docker run --rm \
                   -v ${WORKSPACE}:/mnt \
@@ -1205,12 +1205,12 @@ EOF
               curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                 -H "Accept: application/vnd.github.v3+json" \
                 "https://api.github.com/repos/$IG_USER/$IG_REPO/issues/$PULL_REQUEST/comments" \
-                -d "{\\"body\\": \\"I am a bot, here are the test results for this PR: \\n${CI_URL}\\n${table}\\"}"
+                -d "{\\"body\\": \\"I am a bot, here are the test results for this PR: \\n${CI_URL}\\n${SHELLCHECK_URL}\\n${table}\\"}"
             else
               curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                 -H "Accept: application/vnd.github.v3+json" \
                 "https://api.github.com/repos/$IG_USER/$IG_REPO/issues/$PULL_REQUEST/comments" \
-                -d "{\\"body\\": \\"I am a bot, here is the pushed image/manifest for this PR: \\n\\n\\`${IMAGE}:${META_TAG}\\`\\"}"
+                -d "{\\"body\\": \\"I am a bot, here is the pushed image/manifest for this PR: \\n\\n\\`${GITHUBIMAGE}:${META_TAG}\\`\\"}"
             fi
             '''
 
@@ -1250,12 +1250,12 @@ EOF
         }
         else if (currentBuild.currentResult == "SUCCESS"){
           sh ''' curl -X POST -H "Content-Type: application/json" --data '{"avatar_url": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jenkins-avatar.png","embeds": [{"color": 1681177,\
-                 "description": "**'${IG_REPO}' Build '${BUILD_NUMBER}' ({{ ig_branch }})**\\n**CI Results:**  '${CI_URL}'\\n**Job:** '${RUN_DISPLAY_URL}'\\n**Changes:** '${CODE_URL}'\\n**External Release:** '${RELEASE_LINK}'\\n"}],\
+                 "description": "**'${IG_REPO}' Build '${BUILD_NUMBER}' ({{ ig_branch }})**\\n**CI Results:** '${CI_URL}'\\n**ShellCheck Results:** '${SHELLCHECK_URL}'\\n**Job:** '${RUN_DISPLAY_URL}'\\n**Changes:** '${CODE_URL}'\\n**External Release:** '${RELEASE_LINK}'\\n"}],\
                  "username": "Jenkins"}' ${BUILDS_DISCORD} '''
         }
         else {
           sh ''' curl -X POST -H "Content-Type: application/json" --data '{"avatar_url": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/jenkins-avatar.png","embeds": [{"color": 16711680,\
-                 "description": "**'${IG_REPO}' Build '${BUILD_NUMBER}' Failed! ({{ ig_branch }})**\\n**CI Results:**  '${CI_URL}'\\n**Job:** '${RUN_DISPLAY_URL}'\\n**Change:** '${CODE_URL}'\\n**External Release:** '${RELEASE_LINK}'\\n"}],\
+                 "description": "**'${IG_REPO}' Build '${BUILD_NUMBER}' Failed! ({{ ig_branch }})**\\n**CI Results:** '${CI_URL}'\\n**ShellCheck Results:** '${SHELLCHECK_URL}'\\n**Job:** '${RUN_DISPLAY_URL}'\\n**Change:** '${CODE_URL}'\\n**External Release:** '${RELEASE_LINK}'\\n"}],\
                  "username": "Jenkins"}' ${BUILDS_DISCORD} '''
         }
       }
