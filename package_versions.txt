@@ -12,7 +12,7 @@ ansible-core                         2.14.5                              python
 ansible-core                         2.14.5-r0                           apk          
 ansible-core-pyc                     2.14.5-r0                           apk          
 ansible-pyc                          7.5.0-r0                            apk          
-apk-tools                            2.14.0-r2                           apk          
+apk-tools                            2.14.3-r1                           apk          
 bash                                 5.2.15-r5                           apk          
 bcrypt                               4.0.1                               python       
 brotli-libs                          1.0.9-r14                           apk          
