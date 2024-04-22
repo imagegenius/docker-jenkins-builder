@@ -89,7 +89,7 @@ jobs:
           image="{{ better_vars.IG_USER }}/{{ project_name }}"
           tag="{{ release_tag }}"
           token=$(curl -sX GET \
-		    -u "${{ '{{' }} secrets.CR_USER {{ '}}' }}:${{ '{{' }} secrets.CR_PAT {{ '}}' }}" \
+            -u "${{ '{{' }} secrets.CR_USER {{ '}}' }}:${{ '{{' }} secrets.CR_PAT {{ '}}' }}" \
             "https://ghcr.io/token?scope=repository%3A{{ better_vars.IG_USER }}%2F{{ project_name }}%3Apull" \
             | jq -r '.token')
 {% if better_vars.MULTIARCH == 'true' %}
