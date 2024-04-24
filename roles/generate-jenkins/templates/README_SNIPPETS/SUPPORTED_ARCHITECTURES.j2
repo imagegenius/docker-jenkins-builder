@@ -1,10 +1,10 @@
 ## Supported Architectures
 
-We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://distribution.github.io/distribution/spec/manifest-v2-2/#manifest-list) and our announcement [here]({{ lsio_blog_url }}/2019/02/21/the-lsio-pipeline-project/).
+We use Docker manifest for cross-platform compatibility. More details can be found on [Docker's website](https://github.com/docker/distribution/blob/master/docs/spec/manifest-v2-2.md#manifest-list).
 
-Simply pulling `lscr.io/{{ lsio_project_name_short }}/{{ project_name }}:{{ release_tag }}` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
+To obtain the appropriate image for your architecture, simply pull `ghcr.io/{{ ig_project_name_short }}/{{ project_name }}:{{ release_tag }}`. Alternatively, you can also obtain specific architecture images by using tags.
 
-The architectures supported by this image are:
+This image supports the following architectures:
 
 | Architecture | Available | Tag |
 | :----: | :----: | ---- |

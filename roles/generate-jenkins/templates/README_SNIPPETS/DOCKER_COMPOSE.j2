@@ -2,7 +2,7 @@
 {% if not custom_compose is defined %}---
 services:
   {{ project_name }}:
-    image: lscr.io/{{ lsio_project_name_short }}/{{ project_name }}:{{ release_tag }}
+    image: ghcr.io/{{ ig_project_name_short }}/{{ project_name }}:{{ release_tag }}
     container_name: {{ project_name }}
 {% if param_usage_include_hostname is sameas true %}
     hostname: {{ param_hostname }}

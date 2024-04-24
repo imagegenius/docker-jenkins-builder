@@ -3,7 +3,6 @@
 {% from 'common_macros.j2' import noter with context %}
 {%- set has_latest= true if (development_versions == true and 'latest' in (development_versions_items | map(attribute="tag"))) or (development_versions == false) else false -%}
 {% include "README_SNIPPETS/DO_NOT_EDIT.j2" | trim %}
-{% include "README_SNIPPETS/GROUP_INFO.j2" | trim %}
 
 {% if project_deprecation_status %}
 {% include "README_SNIPPETS/DEPRECATION.j2" | trim %}
@@ -11,7 +10,7 @@
 {% endif %}
 {%- set output_format="**\\g<level>**: \\g<message>" -%}
 {%- from 'common_macros.j2' import noter with context %}
-# [{{ lsio_project_name_short }}/{{ project_name }}]({{ project_github_repo_url }})
+# [{{ ig_project_name_short }}/{{ project_name }}]({{ project_github_repo_url }})
 
 {% include "README_SNIPPETS/PROJECT_BADGES.j2" | trim %}
 
@@ -59,7 +58,7 @@
 
 ## Parameters
 
-Containers are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 8080:80` would expose port `80` from inside the container to be accessible from the host's IP on port `8080` outside the container.
+To configure the container, pass variables at runtime using the format `<external>:<internal>`. For instance, `-p 8080:80` exposes port `80` inside the container, making it accessible outside the container via the host's IP on port `8080`.
 
 | Parameter | Function |
 | :----: | --- |
@@ -137,14 +136,6 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `--security-opt {{ item.run_var }}` | {{ item.desc }} |
 {% endfor %}
 {% endif %}
-{% if cap_add_param or opt_cap_add_param or (custom_params is defined and 'sysctl' in (custom_params | map(attribute="name")) ) %}
-
-### Portainer notice
-
-This image utilises `cap_add` or `sysctl` to work properly. This is not implemented properly in some versions of Portainer, thus this image may not work if deployed through Portainer.
-{% endif %}
-
-{% include "README_SNIPPETS/ENV_VAR_FILES.j2" | trim %}
 
 {% include "README_SNIPPETS/UMASK.j2" | trim %}
 
@@ -156,12 +147,7 @@ This image utilises `cap_add` or `sysctl` to work properly. This is not implemen
 {% include "README_SNIPPETS/USER_GROUP_IDENTIFIERS.j2" | trim %}
 
 {% endif %}
-{% include "README_SNIPPETS/DOCKER_MODS.j2" | trim %}
-
-{% include "README_SNIPPETS/SUPPORT_INFO.j2" | trim %}
 
 {% include "README_SNIPPETS/UPDATING_INFO.j2" | trim %}
-
-{% include "README_SNIPPETS/BUILDING_LOCALLY.j2" | trim %}
 
 {% include "README_SNIPPETS/VERSIONS.j2" | trim %}

@@ -129,7 +129,7 @@ docker run -d \
 {% endfor %}
 {% endif %}
   --restart unless-stopped \
-  lscr.io/{{ lsio_project_name_short }}/{{ project_name }}:{{ release_tag }}
+  ghcr.io/{{ ig_project_name_short }}/{{ project_name }}:{{ release_tag }}
 {% if external_application_snippet_enabled %}
 
 # This container requires an external application to be run separately.
