@@ -17,8 +17,15 @@
     gid: "{{ lookup('env', 'PGID') | int }}"
 
 ######################################
-#         Grab the Variables         #
+#   Grab the Variables from github   #
 ######################################
+- name: download variables
+  when: lookup('env', 'LOCAL') != "true"
+  get_url:
+    url: "https://raw.githubusercontent.com/{{ github_user }}/docker-{{ container_name }}/{{ github_branch }}/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  loop: "{{  templated_vars  }}"
+
 - name: include var files for this project
   include_vars:
     file: "/tmp/{{ item }}"
@@ -635,4 +642,9 @@
   when:
     - lookup('env', 'LOCAL') != "true"
   command: chmod -R 777 /ansible/jenkins
+  delegate_to: localhost
+- name: Allow non root host to delete temp files
+  when:
+    - lookup('env', 'LOCAL') == "true"
+  command: chmod -R 777 /tmp
   delegate_to: localhost
