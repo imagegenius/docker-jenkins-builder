@@ -273,11 +273,8 @@ pipeline {
               # ${TEMPDIR}/docs/docker-documentation: Cloned docs repo for pushing docs updates to Github
               # ${TEMPDIR}/unraid/docker-templates: Cloned docker-templates repo to check for logos
               # ${TEMPDIR}/unraid/templates: Cloned templates repo for commiting unraid template changes and pushing back to Github
-              mkdir -p ${TEMPDIR}/source
-              git clone https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/source
-              cd ${TEMPDIR}/source
-              git checkout -f master
-              docker run --rm -e CONTAINER_NAME=${CONTAINER_NAME} -e GITHUB_BRANCH=master -v ${TEMPDIR}/source:/tmp -v ${TEMPDIR}:/ansible/jenkins jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
+              git clone --branch master --depth 1 https://ImageGeniusCI:${GITHUB_TOKEN}@github.com/${IG_USER}/${IG_REPO}.git ${TEMPDIR}/docker-${CONTAINER_NAME}
+              docker run --rm -v ${TEMPDIR}/docker-${CONTAINER_NAME}:/tmp -e LOCAL=true jenkinslocal:${COMMIT_SHA}-${BUILD_NUMBER} 
               echo "Starting Stage 1 - Jenkinsfile update"
               if [[ "$(md5sum Jenkinsfile | awk '{ print $1 }')" != "$(md5sum ${TEMPDIR}/docker-${CONTAINER_NAME}/Jenkinsfile | awk '{ print $1 }')" ]]; then
                 mkdir -p ${TEMPDIR}/repo
@@ -352,6 +349,7 @@ pipeline {
                 echo "false" > /tmp/${COMMIT_SHA}-${BUILD_NUMBER}
                 echo "No templates to update"
               fi
+              echo "Starting Stage 4 - External repo update: Unraid Template"
               rm -Rf ${TEMPDIR}'''
         script{
           env.FILES_UPDATED = sh(
