@@ -73,7 +73,7 @@ libunistring                         1.1-r2                              apk
 linux-pam                            1.5.3-r7                            apk          
 markupsafe                           2.1.3                               python       
 mpdecimal                            2.5.1-r2                            apk          
-musl                                 1.2.4_git20230717-r4                apk          
+musl                                 1.2.4_git20230717-r5                apk          
 musl-utils                           1.2.4_git20230717-r4                apk          
 ncurses-terminfo-base                6.4_p20231125-r0                    apk          
 netcat-openbsd                       1.226-r0                            apk          
