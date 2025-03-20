@@ -49,7 +49,7 @@ golang.org/x/xerrors                 v0.0.0-20220609144429-65e65417b02f  go-modu
 gopkg.in/op/go-logging.v1            v1.0.0-20160211212156-b2cb9fa56473  go-module    
 gopkg.in/yaml.v3                     v3.0.1                              go-module    
 grafana-ansible-collection           2.1.4                               npm          
-jinja2                               3.1.5                               python       
+jinja2                               3.1.6                               python       
 jq                                   1.7.1-r0                            apk          
 libacl                               2.3.1-r4                            apk          
 libattr                              2.5.1-r5                            apk          
@@ -58,7 +58,7 @@ libbz2                               1.0.8-r6                            apk
 libc-utils                           0.7.2-r5                            apk          
 libcrypto3                           3.1.8-r0                            apk          
 libcurl                              8.5.0-r0                            apk          
-libexpat                             2.6.4-r0                            apk          
+libexpat                             2.7.0-r0                            apk          
 libffi                               3.4.4-r3                            apk          
 libgcc                               13.2.1_git20231014-r0               apk          
 libidn2                              2.3.4-r4                            apk          
@@ -90,8 +90,8 @@ py3-cparser                          2.21-r4                             apk
 py3-cparser-pyc                      2.21-r4                             apk          
 py3-cryptography                     41.0.7-r0                           apk          
 py3-cryptography-pyc                 41.0.7-r0                           apk          
-py3-jinja2                           3.1.5-r0                            apk          
-py3-jinja2-pyc                       3.1.5-r0                            apk          
+py3-jinja2                           3.1.6-r0                            apk          
+py3-jinja2-pyc                       3.1.6-r0                            apk          
 py3-markupsafe                       2.1.3-r0                            apk          
 py3-markupsafe-pyc                   2.1.3-r0                            apk          
 py3-packaging                        23.2-r0                             apk          
