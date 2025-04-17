@@ -119,7 +119,7 @@ resolvelib                           1.0.1                               python
 scanelf                              1.3.7-r2                            apk          
 shadow                               4.14.2-r0                           apk          
 skalibs                              2.14.0.1-r0                         apk          
-sqlite-libs                          3.44.2-r0                           apk          
+sqlite-libs                          3.44.2-r1                           apk          
 ssl_client                           1.36.1-r19                          apk          
 stdlib                               go1.20.4                            go-module    
 tzdata                               2024a-r0                            apk          
