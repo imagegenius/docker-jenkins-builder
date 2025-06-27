@@ -20,7 +20,7 @@ pipeline {
     CONTAINER_NAME = 'jenkins-builder'
     DIST_IMAGE = 'alpine'
     MULTIARCH = 'true'
-    CI = 'false'
+    CI = 'true'
     CI_WEB = 'true'
     CI_PORT = '8000'
     CI_SSL = 'false'
@@ -248,7 +248,7 @@ pipeline {
                     python3 -m venv /lsiopy && \
                     pip install --no-cache-dir -U pip && \
                     pip install --no-cache-dir s3cmd && \
-                    s3cmd --host=s3.imagegenius.io --host-bucket= put -m text/xml /mnt/shellcheck-result.xml s3://ci-tests/${CONTAINER_NAME}/${META_TAG}/shellcheck-result.xml" || :
+                    s3cmd --host=https://ff6f87cc1940578fbe957a7b39b0ae72.r2.cloudflarestorage.com --host-bucket= put -m text/xml /mnt/shellcheck-result.xml s3://ci-tests/${CONTAINER_NAME}/${META_TAG}/shellcheck-result.xml" || :
              '''
         }
       }
